@@ -52,7 +52,7 @@ class PostController extends Controller
     {
         $post = DB::table(PostController::$TABLE_NAME)->find($id);
 
-        if ($post->exists()) {
+        if ($post != null) {
             return \view('post.show', [
                 PostController::$VIEW_DATA => $post,
             ]);
@@ -98,7 +98,7 @@ class PostController extends Controller
 
         $post = DB::table(PostController::$TABLE_NAME)->find($id);
 
-        if ($post->exists()) {
+        if ($post != null) {
             return \view('post.edit', [
                 PostController::$VIEW_DATA => $post,
             ]);
@@ -120,7 +120,7 @@ class PostController extends Controller
 
         $post = DB::table(PostController::$TABLE_NAME)->find($id);
 
-        if ($post->exists()) {
+        if ($post != null) {
             $post->update([
                 PostController::$TABLE_SLUG => $validatedRequest->slug,
                 PostController::$TABLE_TITLE => $validatedRequest->title,
@@ -144,7 +144,7 @@ class PostController extends Controller
 
         $post = DB::table(PostController::$TABLE_NAME)->find($id);
 
-        if ($post->exists()) {
+        if ($post != null) {
             $post->delete();
             return \redirect()->action(
                 [PostController::class, 'index'],

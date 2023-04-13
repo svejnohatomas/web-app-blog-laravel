@@ -48,7 +48,7 @@ class CategoryController extends Controller
     {
         $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
 
-        if ($category->exists()) {
+        if ($category != null) {
             return \view('category.show', [
                 CategoryController::$VIEW_DATA => $category,
             ]);
@@ -91,7 +91,7 @@ class CategoryController extends Controller
 
         $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
 
-        if ($category->exists()) {
+        if ($category != null) {
             return \view('category.edit', [
                 CategoryController::$VIEW_DATA => $category,
             ]);
@@ -113,7 +113,7 @@ class CategoryController extends Controller
 
         $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
 
-        if ($category->exists()) {
+        if ($category != null) {
             $category->update([
                 CategoryController::$TABLE_SLUG => $validatedRequest->slug,
                 CategoryController::$TABLE_TITLE => $validatedRequest->title,
@@ -136,7 +136,7 @@ class CategoryController extends Controller
 
         $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
 
-        if ($category->exists()) {
+        if ($category != null) {
             $category->delete();
             return \redirect()->action(
                 [CategoryController::class, 'index'],

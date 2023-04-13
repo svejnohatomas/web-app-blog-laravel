@@ -46,7 +46,7 @@ class CommentController extends Controller
 
         $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
 
-        if ($comment->exists()) {
+        if ($comment != null) {
             return \view('comment.edit', [
                 CommentController::$VIEW_DATA => $comment,
             ]);
@@ -67,7 +67,7 @@ class CommentController extends Controller
 
         $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
 
-        if ($comment->exists()) {
+        if ($comment != null) {
             $comment->update([
                 CommentController::$TABLE_CONTENT => $validatedRequest->content,
             ]);
@@ -86,7 +86,7 @@ class CommentController extends Controller
     {
         $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
 
-        if ($comment->exists()) {
+        if ($comment != null) {
             $comment->delete();
             return response()->noContent(ResponseAlias::HTTP_NO_CONTENT);
         } else {
