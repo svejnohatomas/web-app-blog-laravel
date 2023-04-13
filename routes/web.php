@@ -50,7 +50,7 @@ Route::controller(CategoryController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     // Read
-    Route::get('/categories/{categoryId}/posts', [PostController::class, 'index'])->name('post.index');
+    Route::get('/categories/{categoryId}/posts', [PostController::class, 'index'])->name('post.index')->whereNumber('categoryId');
     Route::get('/posts/{id}', [PostController::class, 'show'])->name('post.show')->whereNumber('id');
 
     // Create
