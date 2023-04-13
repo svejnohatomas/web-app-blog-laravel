@@ -27,7 +27,7 @@ class PostCreateRequest extends FormRequest
         return [
             'category_id' => ['required', 'exists:App\Models\Category,id'],
             'user_id' => ['required', 'exists:App\Models\User,id'],
-            'slug' => ['required', 'max:255'],
+            'slug' => ['required', 'max:255', 'unique:posts'],
             'title' => ['required', 'max:255'],
             'excerpt' => ['required', 'max:255'],
             'content' => ['required'],
