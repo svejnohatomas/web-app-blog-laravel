@@ -2,59 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Shared\QueryParameters;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryDeleteRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CategoryController extends Controller
 {
-    private static string $TABLE_NAME = 'categories';
-    private static string $TABLE_ID = 'id';
-    private static string $TABLE_SLUG = 'slug';
-    private static string $TABLE_TITLE = 'title';
-    private static string $TABLE_DESCRIPTION = 'description';
+    public static string $VIEW_DATA_CATEGORY = 'category';
+    public static string $VIEW_DATA_CATEGORY_COLLECTION = 'categories';
+    public static string $VIEW_DATA_POST_COLLECTION = 'posts';
 
-    public static string $VIEW_DATA = 'category';
-    public static string $VIEW_DATA_COLLECTION = 'categories';
-
-    // GET /categories?page=1&itemsPerPage=20
+    // GET /categories
     public function index(Request $request): View
     {
-        $page = $request->query(QueryParameters::$PAGE, QueryParameters::$PAGE_DEFAULT) - 1;
-        $itemsPerPage = $request->query(QueryParameters::$ITEMS_PER_PAGE, QueryParameters::$ITEMS_PER_PAGE_DEFAULT);
+        // TODO: Paginate
 
-        $categories = DB::table(CategoryController::$TABLE_NAME)
-            ->orderByDesc(CategoryController::$TABLE_ID)
-            ->skip($page * $itemsPerPage)
-            ->take($itemsPerPage)
+        // TODO: Cache
+        $categories = Category::query()
+            ->orderByDesc('id')
             ->get();
 
         return \view('category.index', [
-            QueryParameters::$PAGE => $page + 1,
-            QueryParameters::$ITEMS_PER_PAGE => $itemsPerPage,
-            CategoryController::$VIEW_DATA_COLLECTION => $categories,
+            CategoryController::$VIEW_DATA_CATEGORY_COLLECTION => $categories,
         ]);
     }
 
-    // GET /categories/5
-    public function show(int $id): View
+    // GET /categories/{slug}
+    public function show(string $slug): View
     {
-        $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
+        $cacheKey = hash('sha256', "category.$slug");
+        $category = cache()->remember($cacheKey, now()->addMinute(), function () use ($slug) {
+            return Category::query()
+                ->where('slug', '=', $slug)
+                ->first();
+        });
 
-        if ($category != null) {
-            return \view('category.show', [
-                CategoryController::$VIEW_DATA => $category,
-            ]);
-        } else {
+        if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        // TODO: Pagination
+        $posts = Post::query()
+            ->where('posts.category_id', '=', $category->id)
+            ->with('user')
+            ->with('comments')
+            ->orderByDesc('posts.id')
+            ->get();
+
+        return \view('category.show', [
+            CategoryController::$VIEW_DATA_CATEGORY => $category,
+            CategoryController::$VIEW_DATA_POST_COLLECTION => $posts,
+        ]);
     }
 
     // GET /categories/create
@@ -73,34 +77,36 @@ class CategoryController extends Controller
         $validatedRequest = $request->validated();
 
         $category = Category::create([
-            CategoryController::$TABLE_SLUG => $validatedRequest->slug,
-            CategoryController::$TABLE_TITLE => $validatedRequest->title,
-            CategoryController::$TABLE_DESCRIPTION => $validatedRequest->description,
+            'slug' => $validatedRequest->slug,
+            'title' => $validatedRequest->title,
+            'description' => $validatedRequest->description,
         ]);
 
         return redirect()->action(
             [CategoryController::class, 'show'],
-            [CategoryController::$TABLE_ID, $category->id],
+            ['slug', $category->slug],
         );
     }
 
-    // GET: /categories/edit/5
-    public function edit(int $id): View
+    // GET: /categories/edit/{slug}
+    public function edit(string $slug): View
     {
         // TODO: Authorize
 
-        $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
+        $category = Category::query()
+            ->where('slug', $slug)
+            ->first();
 
         if ($category != null) {
             return \view('category.edit', [
-                CategoryController::$VIEW_DATA => $category,
+                CategoryController::$VIEW_DATA_CATEGORY => $category,
             ]);
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
-    // PUT: /categories/edit/5
+    // PUT: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
@@ -111,30 +117,30 @@ class CategoryController extends Controller
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
-        $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
+        $category = Category::query()->find($id);
 
         if ($category != null) {
             $category->update([
-                CategoryController::$TABLE_SLUG => $validatedRequest->slug,
-                CategoryController::$TABLE_TITLE => $validatedRequest->title,
-                CategoryController::$TABLE_DESCRIPTION => $validatedRequest->description,
+                'slug' => $validatedRequest->slug,
+                'title' => $validatedRequest->title,
+                'description' => $validatedRequest->description,
             ]);
 
             return redirect()->action(
                 [CategoryController::class, 'show'],
-                [CategoryController::$TABLE_ID, $category->id],
+                ['slug', $category->slug],
             );
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
-    // DELETE: /categories/delete/5
+    // DELETE: /categories/delete/{id}
     public function destroy(CategoryDeleteRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
 
-        $category = DB::table(CategoryController::$TABLE_NAME)->find($id);
+        $category = Category::query()->find($id);
 
         if ($category != null) {
             $category->delete();

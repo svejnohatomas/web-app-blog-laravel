@@ -1,12 +1,29 @@
-<p>Category Index</p>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Categories') }}
+        </h2>
+    </x-slot>
 
-{{ $page }}
-<br>
-{{ $itemsPerPage }}
-<br>
-<br>
-
-@foreach($categories as $item)
-    {{ $item->id }}
-    <br>
-@endforeach
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @foreach($categories as $item)
+                <article class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg {{ $loop->first ? '' : 'mt-6' }}">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <div>
+                            <a href="{{ route('category.show', $item->slug) }}">
+                                <h3>{{ $item->title }}</h3>
+                            </a>
+                        </div>
+                        <div class="my-3">
+                            <p>{{ $item->description }}</p>
+                        </div>
+                        <div class="flex justify-end">
+                            <a class="text-gray-900 hover:text-gray-700 dark:text-gray-100 hover:dark:text-gray-400" aria-label="all posts" href="{{ route('category.show', $item->slug) }}">View Posts →</a>
+                        </div>
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</x-app-layout>

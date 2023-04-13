@@ -2,71 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Shared\QueryParameters;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostDeleteRequest;
 use App\Http\Requests\PostUpdateRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PostController extends Controller
 {
-    private static string $TABLE_NAME = 'posts';
-    private static string $TABLE_CATEGORY_ID = 'category_id';
-    private static string $TABLE_USER_ID = 'user_id';
-    private static string $TABLE_SLUG = 'slug';
-    private static string $TABLE_TITLE = 'title';
-    private static string $TABLE_EXCERPT = 'excerpt';
-    private static string $TABLE_CONTENT = 'content';
+    public static string $VIEW_DATA_CATEGORY = 'category';
+    public static string $VIEW_DATA_POST = 'post';
+    public static string $VIEW_DATA_POST_COLLECTION = 'posts';
 
-    public static string $TABLE_ID = 'id';
-    public static string $VIEW_DATA = 'post';
-    public static string $VIEW_DATA_COLLECTION = 'posts';
-
-    // GET /categories/5/posts
-    public function index(Request $request, int $categoryId): View
+    // GET /posts/{slug}
+    public function show(string $slug): View
     {
-        $page = $request->query(QueryParameters::$PAGE, QueryParameters::$PAGE_DEFAULT) - 1;
-        $itemsPerPage = $request->query(QueryParameters::$ITEMS_PER_PAGE, QueryParameters::$ITEMS_PER_PAGE_DEFAULT);
-
-        $posts = DB::table(PostController::$TABLE_NAME)
-            ->where(PostController::$TABLE_CATEGORY_ID, '=', $categoryId)
-            ->orderByDesc(PostController::$TABLE_ID)
-            ->skip($page * $itemsPerPage)
-            ->take($itemsPerPage)
-            ->get();
-
-        return \view('post.index', [
-            QueryParameters::$PAGE => $page + 1,
-            QueryParameters::$ITEMS_PER_PAGE => $itemsPerPage,
-            PostController::$VIEW_DATA_COLLECTION => $posts,
-        ]);
-    }
-
-    // GET /posts/5
-    public function show(int $id): View
-    {
-        $post = DB::table(PostController::$TABLE_NAME)->find($id);
+        $post = Post::query()
+            ->where('slug', '=', $slug)
+            ->first();
 
         if ($post != null) {
             return \view('post.show', [
-                PostController::$VIEW_DATA => $post,
+                PostController::$VIEW_DATA_POST => $post,
             ]);
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
-    // GET /posts/create
-    public function create(): View
+    // GET /categories/{categorySlug}/posts/create
+    public function create(string $categorySlug): View
     {
         // TODO: Authorize
+        $category = Category::query()
+            ->where('slug', '=', $categorySlug)
+            ->first();
 
-        return \view('post.create');
+        return \view('post.create', [
+            PostController::$VIEW_DATA_CATEGORY => $category,
+        ]);
     }
 
     // POST /posts/create
@@ -77,37 +54,39 @@ class PostController extends Controller
         $validatedRequest = $request->validated();
 
         $post = Post::create([
-            PostController::$TABLE_CATEGORY_ID => $validatedRequest->category_id,
-            PostController::$TABLE_USER_ID => $validatedRequest->user_id,
-            PostController::$TABLE_SLUG => $validatedRequest->slug,
-            PostController::$TABLE_TITLE => $validatedRequest->title,
-            PostController::$TABLE_EXCERPT => $validatedRequest->excerpt,
-            PostController::$TABLE_CONTENT => $validatedRequest->content,
+            'category_id' => $validatedRequest->category_id,
+            'user_id' => $validatedRequest->user_id,
+            'slug' => $validatedRequest->slug,
+            'title' => $validatedRequest->title,
+            'excerpt' => $validatedRequest->excerpt,
+            'content' => $validatedRequest->content,
         ]);
 
         return redirect()->action(
             [PostController::class, 'show'],
-            [PostController::$TABLE_ID, $post->id],
+            ['slug', $post->slug],
         );
     }
 
-    // GET: /posts/edit/5
-    public function edit(int $id): View
+    // GET: /posts/edit/{slug}
+    public function edit(string $slug): View
     {
         // TODO: Authorize - Resource owner authorization
 
-        $post = DB::table(PostController::$TABLE_NAME)->find($id);
+        $post = Post::query()
+            ->where('slug', '=', $slug)
+            ->first();
 
         if ($post != null) {
             return \view('post.edit', [
-                PostController::$VIEW_DATA => $post,
+                PostController::$VIEW_DATA_POST => $post,
             ]);
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
-    // PUT: /posts/edit/5
+    // PUT: /posts/edit/{id}
     public function update(PostUpdateRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
@@ -118,31 +97,31 @@ class PostController extends Controller
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
-        $post = DB::table(PostController::$TABLE_NAME)->find($id);
+        $post = Post::query()->find($id);
 
         if ($post != null) {
             $post->update([
-                PostController::$TABLE_SLUG => $validatedRequest->slug,
-                PostController::$TABLE_TITLE => $validatedRequest->title,
-                PostController::$TABLE_EXCERPT => $validatedRequest->excerpt,
-                PostController::$TABLE_CONTENT => $validatedRequest->content,
+                'slug' => $validatedRequest->slug,
+                'title' => $validatedRequest->title,
+                'excerpt' => $validatedRequest->excerpt,
+                'content' => $validatedRequest->content,
             ]);
 
             return redirect()->action(
                 [PostController::class, 'show'],
-                [PostController::$TABLE_ID, $post->id],
+                ['slug', $post->slug],
             );
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
-    // DELETE: /posts/delete/5
+    // DELETE: /posts/delete/{id}
     public function destroy(PostDeleteRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
 
-        $post = DB::table(PostController::$TABLE_NAME)->find($id);
+        $post = Post::query()->find($id);
 
         if ($post != null) {
             $post->delete();

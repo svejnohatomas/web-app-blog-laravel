@@ -16,16 +16,13 @@ class Post extends Model
         'excerpt',
         'content',
     ];
-    protected $guarded = [
-        'id',
-    ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function author(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

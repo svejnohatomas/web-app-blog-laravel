@@ -8,18 +8,11 @@ use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CommentController extends Controller
 {
-    private static string $TABLE_NAME = 'comments';
-    private static string $TABLE_ID = 'id';
-    private static string $TABLE_USER_ID = 'user_id';
-    private static string $TABLE_POST_ID = 'post_id';
-    private static string $TABLE_CONTENT = 'content';
-
     public static string $VIEW_DATA = 'comment';
     public static string $VIEW_DATA_COLLECTION = 'comments';
 
@@ -31,9 +24,9 @@ class CommentController extends Controller
         $validatedRequest = $request->validated();
 
         Comment::create([
-            CommentController::$TABLE_USER_ID => $validatedRequest->user_id,
-            CommentController::$TABLE_POST_ID => $validatedRequest->post_id,
-            CommentController::$TABLE_CONTENT => $validatedRequest->content,
+            'user_id' => $validatedRequest->user_id,
+            'post_id' => $validatedRequest->post_id,
+            'content' => $validatedRequest->content,
         ]);
 
         return response()->noContent(ResponseAlias::HTTP_CREATED);
@@ -44,7 +37,7 @@ class CommentController extends Controller
     {
         // TODO: Authorize - Resource owner authorization
 
-        $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
+        $comment = Comment::query()->find($id);
 
         if ($comment != null) {
             return \view('comment.edit', [
@@ -65,16 +58,16 @@ class CommentController extends Controller
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
-        $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
+        $comment = Comment::query()->find($id);
 
         if ($comment != null) {
             $comment->update([
-                CommentController::$TABLE_CONTENT => $validatedRequest->content,
+                'content' => $validatedRequest->content,
             ]);
 
             return redirect()->action(
                 [PostController::class, 'show'],
-                [PostController::$TABLE_ID, $comment->post_id],
+                ['id', $comment->post_id],
             );
         } else {
             abort(ResponseAlias::HTTP_NOT_FOUND);
@@ -84,7 +77,7 @@ class CommentController extends Controller
     // DELETE /comments/delete/{id}
     public function destroy(CommentDeleteRequest $request, int $id): Response
     {
-        $comment = DB::table(CommentController::$TABLE_NAME)->find($id);
+        $comment = Comment::query()->find($id);
 
         if ($comment != null) {
             $comment->delete();
