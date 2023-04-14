@@ -20,7 +20,11 @@
                                 <a href="{{ route('category.edit', ['slug' => $item->slug]) }}">{{ __('Edit') }}</a>
                             </div>
                             <div class="flex-none">
-                                b
+                                <form method="POST" action="{{ route('category.destroy', ['id' => $item->id]) }}">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button>Delete</button>
+                                </form>
                             </div>
                         </div>
                         <div class="my-3">
