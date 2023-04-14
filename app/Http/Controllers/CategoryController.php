@@ -36,12 +36,9 @@ class CategoryController extends Controller
     // GET /categories/{slug}
     public function show(string $slug): View
     {
-        $cacheKey = hash('sha256', "category.$slug");
-        $category = cache()->remember($cacheKey, now()->addMinute(), function () use ($slug) {
-            return Category::query()
-                ->where('slug', '=', $slug)
-                ->first();
-        });
+        $category = Category::query()
+            ->where('slug', '=', $slug)
+            ->first();
 
         if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
@@ -127,9 +124,6 @@ class CategoryController extends Controller
             'title' => $validatedRequest['title'],
             'description' => $validatedRequest['description'],
         ]);
-
-        $cacheKey = hash('sha256', "category.$category->slug");
-        cache()->forget($cacheKey);
 
         return redirect()->action(
             [CategoryController::class, 'show'],
