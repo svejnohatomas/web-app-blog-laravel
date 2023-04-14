@@ -1,8 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Categories') }}
-        </h2>
+        <div class="flex">
+            <div class="flex-1">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Categories') }}
+                </h2>
+            </div>
+            <div class="flex-none">
+                <a href="{{ route('category.create') }}" class="text-gray-800 dark:text-gray-200">New Category</a>
+            </div>
+        </div>
+
     </x-slot>
 
     <div class="py-6">
