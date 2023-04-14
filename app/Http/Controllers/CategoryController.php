@@ -106,33 +106,35 @@ class CategoryController extends Controller
         }
     }
 
-    // PUT: /categories/edit/{id}
+    // POST: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
 
         $validatedRequest = $request->validated();
 
-        if ($validatedRequest->id != $id) {
+        if ($validatedRequest['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
         $category = Category::query()->find($id);
 
-        if ($category != null) {
-            $category->update([
-                'slug' => $validatedRequest['slug'],
-                'title' => $validatedRequest['title'],
-                'description' => $validatedRequest['description'],
-            ]);
-
-            return redirect()->action(
-                [CategoryController::class, 'show'],
-                ['slug', $category->slug],
-            );
-        } else {
+        if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $category->update([
+            'title' => $validatedRequest['title'],
+            'description' => $validatedRequest['description'],
+        ]);
+
+        $cacheKey = hash('sha256', "category.$category->slug");
+        cache()->forget($cacheKey);
+
+        return redirect()->action(
+            [CategoryController::class, 'show'],
+            ['slug' => $category->slug],
+        );
     }
 
     // DELETE: /categories/delete/{id}

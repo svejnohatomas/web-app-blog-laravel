@@ -43,7 +43,7 @@ Route::controller(CategoryController::class)->group(function () {
 
     // Update
     Route::get('/categories/edit/{slug}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::put('/categories/edit/{id}', [CategoryController::class, 'update'])->name('category.update')->whereNumber('id');
+    Route::post('/categories/edit/{id}', [CategoryController::class, 'update'])->name('category.update')->whereNumber('id');
 
     // Delete
     Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy')->whereNumber('id');
