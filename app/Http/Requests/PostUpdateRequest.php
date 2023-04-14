@@ -26,7 +26,6 @@ class PostUpdateRequest extends FormRequest
     {
         return [
             'id' => ['required', 'integer'],
-            'slug' => ['required', 'max:255', 'unique:posts'],
             'title' => ['required', 'max:255'],
             'excerpt' => ['required', 'max:255'],
             'content' => ['required'],

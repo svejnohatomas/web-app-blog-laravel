@@ -24,13 +24,13 @@ class PostController extends Controller
             ->where('slug', '=', $slug)
             ->first();
 
-        if ($post != null) {
-            return \view('post.show', [
-                PostController::$VIEW_DATA_POST => $post,
-            ]);
-        } else {
+        if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        return \view('post.show', [
+            PostController::$VIEW_DATA_POST => $post,
+        ]);
     }
 
     // GET /categories/{categorySlug}/posts/create
@@ -54,12 +54,12 @@ class PostController extends Controller
         $validatedRequest = $request->validated();
 
         $post = Post::create([
-            'category_id' => $validatedRequest->category_id,
-            'user_id' => $validatedRequest->user_id,
-            'slug' => $validatedRequest->slug,
-            'title' => $validatedRequest->title,
-            'excerpt' => $validatedRequest->excerpt,
-            'content' => $validatedRequest->content,
+            'category_id' => $validatedRequest['category_id'],
+            'user_id' => $validatedRequest['user_id'],
+            'slug' => $validatedRequest['slug'],
+            'title' => $validatedRequest['title'],
+            'excerpt' => $validatedRequest['excerpt'],
+            'content' => $validatedRequest['content'],
         ]);
 
         return redirect()->action(
@@ -77,13 +77,13 @@ class PostController extends Controller
             ->where('slug', '=', $slug)
             ->first();
 
-        if ($post != null) {
-            return \view('post.edit', [
-                PostController::$VIEW_DATA_POST => $post,
-            ]);
-        } else {
+        if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        return \view('post.edit', [
+            PostController::$VIEW_DATA_POST => $post,
+        ]);
     }
 
     // PUT: /posts/edit/{id}
@@ -99,21 +99,20 @@ class PostController extends Controller
 
         $post = Post::query()->find($id);
 
-        if ($post != null) {
-            $post->update([
-                'slug' => $validatedRequest->slug,
-                'title' => $validatedRequest->title,
-                'excerpt' => $validatedRequest->excerpt,
-                'content' => $validatedRequest->content,
-            ]);
-
-            return redirect()->action(
-                [PostController::class, 'show'],
-                ['slug', $post->slug],
-            );
-        } else {
+        if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $post->update([
+            'title' => $validatedRequest['title'],
+            'excerpt' => $validatedRequest['excerpt'],
+            'content' => $validatedRequest['content'],
+        ]);
+
+        return redirect()->action(
+            [PostController::class, 'show'],
+            ['slug', $post->slug],
+        );
     }
 
     // DELETE: /posts/delete/{id}
@@ -123,13 +122,13 @@ class PostController extends Controller
 
         $post = Post::query()->find($id);
 
-        if ($post != null) {
-            $post->delete();
-            return \redirect()->action(
-                [PostController::class, 'index'],
-            );
-        } else {
+        if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $post->delete();
+        return \redirect()->action(
+            [PostController::class, 'index'],
+        );
     }
 }

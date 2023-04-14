@@ -24,9 +24,9 @@ class CommentController extends Controller
         $validatedRequest = $request->validated();
 
         Comment::create([
-            'user_id' => $validatedRequest->user_id,
-            'post_id' => $validatedRequest->post_id,
-            'content' => $validatedRequest->content,
+            'user_id' => $validatedRequest['user_id'],
+            'post_id' => $validatedRequest['post_id'],
+            'content' => $validatedRequest['content'],
         ]);
 
         return response()->noContent(ResponseAlias::HTTP_CREATED);
@@ -39,13 +39,13 @@ class CommentController extends Controller
 
         $comment = Comment::query()->find($id);
 
-        if ($comment != null) {
-            return \view('comment.edit', [
-                CommentController::$VIEW_DATA => $comment,
-            ]);
-        } else {
+        if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        return \view('comment.edit', [
+            CommentController::$VIEW_DATA => $comment,
+        ]);
     }
     // PUT /comments/edit/{id}
     public function update(CommentUpdateRequest $request, int $id): RedirectResponse
@@ -54,24 +54,24 @@ class CommentController extends Controller
 
         $validatedRequest = $request->validated();
 
-        if ($validatedRequest->id != $id) {
+        if ($validatedRequest['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
         $comment = Comment::query()->find($id);
 
-        if ($comment != null) {
-            $comment->update([
-                'content' => $validatedRequest->content,
-            ]);
-
-            return redirect()->action(
-                [PostController::class, 'show'],
-                ['id', $comment->post_id],
-            );
-        } else {
+        if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $comment->update([
+            'content' => $validatedRequest->content,
+        ]);
+
+        return redirect()->action(
+            [PostController::class, 'show'],
+            ['id', $comment->post_id],
+        );
     }
 
     // DELETE /comments/delete/{id}
@@ -79,11 +79,11 @@ class CommentController extends Controller
     {
         $comment = Comment::query()->find($id);
 
-        if ($comment != null) {
-            $comment->delete();
-            return response()->noContent(ResponseAlias::HTTP_NO_CONTENT);
-        } else {
+        if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $comment->delete();
+        return response()->noContent(ResponseAlias::HTTP_NO_CONTENT);
     }
 }
