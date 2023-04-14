@@ -96,7 +96,7 @@ class PostController extends Controller
 
         $validatedRequest = $request->validated();
 
-        if ($validatedRequest->id != $id) {
+        if ($validatedRequest['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
@@ -114,7 +114,7 @@ class PostController extends Controller
 
         return redirect()->action(
             [PostController::class, 'show'],
-            ['slug', $post->slug],
+            ['slug' => $post->slug],
         );
     }
 
@@ -123,7 +123,9 @@ class PostController extends Controller
     {
         // TODO: Authorize
 
-        $post = Post::query()->find($id);
+        $post = Post::query()
+            ->with('category')
+            ->find($id);
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
@@ -131,7 +133,8 @@ class PostController extends Controller
 
         $post->delete();
         return \redirect()->action(
-            [PostController::class, 'index'],
+            [CategoryController::class, 'show'],
+            ['slug' => $post->category->slug]
         );
     }
 }

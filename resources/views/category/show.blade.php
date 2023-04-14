@@ -22,11 +22,25 @@
                 <article
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg {{ $loop->first ? '' : 'mt-6' }}">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div>
-                            <a href="{{ route('post.show', ['slug' => $item->slug]) }}">
-                                <h3>{{ $item->title }}</h3>
-                            </a>
+
+                        <div class="flex space-x-3">
+                            <div class="flex-1">
+                                <a href="{{ route('post.show', ['slug' => $item->slug]) }}">
+                                    <h3>{{ $item->title }}</h3>
+                                </a>
+                            </div>
+                            <div class="flex-none">
+                                <a href="{{ route('post.edit', ['slug' => $item->slug]) }}">{{ __('Edit') }}</a>
+                            </div>
+                            <div class="flex-none">
+                                <form method="POST" action="{{ route('post.destroy', ['id' => $item->id]) }}">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button>Delete</button>
+                                </form>
+                            </div>
                         </div>
+
                         <div class="my-3">
                             <p>{{ $item->excerpt }}</p>
                         </div>
