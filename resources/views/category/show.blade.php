@@ -36,7 +36,9 @@
                                 <span>{{ $item->user->name }}</span>
                             </div>
                             <div class="flex-none">
-                                <span>2000-01-01</span>
+                                @if($item->created_at != null)
+                                    <span>{{ $item->created_at }}</span>
+                                @endif
                             </div>
                         </div>
 

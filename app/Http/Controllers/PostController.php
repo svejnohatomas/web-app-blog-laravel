@@ -8,6 +8,7 @@ use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -40,9 +41,11 @@ class PostController extends Controller
         $category = Category::query()
             ->where('slug', '=', $categorySlug)
             ->first();
+        $userId = Auth::id();
 
         return \view('post.create', [
             PostController::$VIEW_DATA_CATEGORY => $category,
+            'userId' => $userId
         ]);
     }
 
@@ -64,7 +67,7 @@ class PostController extends Controller
 
         return redirect()->action(
             [PostController::class, 'show'],
-            ['slug', $post->slug],
+            ['slug' => $post->slug],
         );
     }
 
