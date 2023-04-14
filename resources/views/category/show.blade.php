@@ -1,8 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-gray-800 dark:text-gray-200 leading-tight font-semibold text-xl">
-            {{ __($category->title) }}
-        </h2>
+        <div class="flex">
+            <div class="flex-1">
+                <h2 class="text-gray-800 dark:text-gray-200 leading-tight font-semibold text-xl">
+                    {{ $category->title }}
+                </h2>
+
+            </div>
+            <div class="flex-none">
+                <a href="{{ route('post.create', ['categorySlug' => $category->slug]) }}" class="text-gray-800 dark:text-gray-200">New Post</a>
+            </div>
+        </div>
         <div class="mt-3 text-gray-600 dark:text-gray-400 leading-tight">
             <p>{{ $category->description }}</p>
         </div>
@@ -11,8 +19,6 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @foreach($posts as $item)
-
-                {{--                {{ dd($item) }}--}}
                 <article
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg {{ $loop->first ? '' : 'mt-6' }}">
                     <div class="p-6 text-gray-900 dark:text-gray-100">

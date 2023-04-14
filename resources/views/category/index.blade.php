@@ -10,7 +10,6 @@
                 <a href="{{ route('category.create') }}" class="text-gray-800 dark:text-gray-200">New Category</a>
             </div>
         </div>
-
     </x-slot>
 
     <div class="py-6">
