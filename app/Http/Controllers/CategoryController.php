@@ -77,9 +77,9 @@ class CategoryController extends Controller
         $validatedRequest = $request->validated();
 
         $category = Category::create([
-            'slug' => $validatedRequest->slug,
-            'title' => $validatedRequest->title,
-            'description' => $validatedRequest->description,
+            'slug' => $validatedRequest['slug'],
+            'title' => $validatedRequest['title'],
+            'description' => $validatedRequest['description'],
         ]);
 
         return redirect()->action(
@@ -121,9 +121,9 @@ class CategoryController extends Controller
 
         if ($category != null) {
             $category->update([
-                'slug' => $validatedRequest->slug,
-                'title' => $validatedRequest->title,
-                'description' => $validatedRequest->description,
+                'slug' => $validatedRequest['slug'],
+                'title' => $validatedRequest['title'],
+                'description' => $validatedRequest['description'],
             ]);
 
             return redirect()->action(

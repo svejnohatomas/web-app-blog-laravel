@@ -17,7 +17,7 @@
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg {{ $loop->first ? '' : 'mt-6' }}">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <div>
-                            <a href="{{ route('post.show', $item->slug) }}">
+                            <a href="{{ route('post.show', ['slug' => $item->slug]) }}">
                                 <h3>{{ $item->title }}</h3>
                             </a>
                         </div>
@@ -36,7 +36,7 @@
 
                         <div class="flex justify-end">
                             <a class="text-gray-900 hover:text-gray-700 dark:text-gray-100 hover:dark:text-gray-400"
-                               aria-label="all posts" href="{{ route('post.show', $item->slug) }}">View →</a>
+                               aria-label="all posts" href="{{ route('post.show', ['slug' => $item->slug]) }}">View →</a>
                         </div>
                     </div>
                 </article>
