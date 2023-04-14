@@ -6,6 +6,7 @@ use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostDeleteRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -17,20 +18,30 @@ class PostController extends Controller
     public static string $VIEW_DATA_CATEGORY = 'category';
     public static string $VIEW_DATA_POST = 'post';
     public static string $VIEW_DATA_POST_COLLECTION = 'posts';
+    public static string $VIEW_DATA_COMMENT_COLLECTION = 'comments';
 
     // GET /posts/{slug}
     public function show(string $slug): View
     {
         $post = Post::query()
             ->where('slug', '=', $slug)
+            ->with('category')
+            ->with('user')
             ->first();
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
 
+        $comments = Comment::query()
+            ->where('post_id', '=', $post->id)
+            ->with('user')
+            ->orderByDesc('created_at')
+            ->get();
+
         return \view('post.show', [
             PostController::$VIEW_DATA_POST => $post,
+            PostController::$VIEW_DATA_COMMENT_COLLECTION => $comments,
         ]);
     }
 
