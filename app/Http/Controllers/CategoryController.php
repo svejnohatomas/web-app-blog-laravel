@@ -94,13 +94,13 @@ class CategoryController extends Controller
             ->where('slug', $slug)
             ->first();
 
-        if ($category != null) {
-            return \view('category.edit', [
-                CategoryController::$VIEW_DATA_CATEGORY => $category,
-            ]);
-        } else {
+        if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        return \view('category.edit', [
+            CategoryController::$VIEW_DATA_CATEGORY => $category,
+        ]);
     }
 
     // PUT: /categories/edit/{id}
