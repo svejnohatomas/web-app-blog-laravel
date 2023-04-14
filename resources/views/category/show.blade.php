@@ -1,15 +1,27 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex">
+        <div class="flex space-x-3">
             <div class="flex-1">
                 <h2 class="text-gray-800 dark:text-gray-200 leading-tight font-semibold text-xl">
                     {{ $category->title }}
                 </h2>
 
             </div>
-            <div class="flex-none">
-                <a href="{{ route('post.create', ['categorySlug' => $category->slug]) }}" class="text-gray-800 dark:text-gray-200">New Post</a>
+            <div class="flex-none text-gray-800 dark:text-gray-200">
+                <a href="{{ route('post.create', ['categorySlug' => $category->slug]) }}">New Post</a>
             </div>
+
+            <div class="flex-none text-gray-800 dark:text-gray-200">
+                <a href="{{ route('category.edit', ['slug' => $category->slug]) }}">{{ __('Edit') }}</a>
+            </div>
+            <div class="flex-none text-gray-800 dark:text-gray-200">
+                <form method="POST" action="{{ route('category.destroy', ['id' => $category->id]) }}">
+                    @method('DELETE')
+                    @csrf
+                    <button>Delete</button>
+                </form>
+            </div>
+
         </div>
         <div class="mt-3 text-gray-600 dark:text-gray-400 leading-tight">
             <p>{{ $category->description }}</p>
