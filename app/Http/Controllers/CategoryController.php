@@ -81,7 +81,7 @@ class CategoryController extends Controller
 
         return redirect()->action(
             [CategoryController::class, 'show'],
-            ['slug', $category->slug],
+            ['slug' => $category->slug],
         );
     }
 
