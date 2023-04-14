@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                   method="POST" action="{{ route('category.update', ['id' => $category->id]) }}">
+                @method('PUT')
                 @csrf
 
                 <!-- Id -->

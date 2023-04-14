@@ -106,7 +106,7 @@ class CategoryController extends Controller
         }
     }
 
-    // POST: /categories/edit/{id}
+    // PUT: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
         // TODO: Authorize
@@ -144,13 +144,13 @@ class CategoryController extends Controller
 
         $category = Category::query()->find($id);
 
-        if ($category != null) {
-            $category->delete();
-            return \redirect()->action(
-                [CategoryController::class, 'index'],
-            );
-        } else {
+        if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+
+        $category->delete();
+        return \redirect()->action(
+            [CategoryController::class, 'index'],
+        );
     }
 }
