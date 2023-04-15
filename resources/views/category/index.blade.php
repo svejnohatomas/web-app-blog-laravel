@@ -44,9 +44,11 @@
                 </article>
             @endforeach
 
-            <div class="mt-6 p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                {{ $categories->links() }}
-            </div>
+            @if($categories->total() > $categories->perPage())
+                <div class="mt-6 p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    {{ $categories->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
