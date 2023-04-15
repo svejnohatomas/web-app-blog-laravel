@@ -32,8 +32,7 @@
                             <div class="flex-1">
                                 <a class="underline hover:no-underline" href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
                             </div>
-                            <!-- TODO: Fix link -->
-                            <div class="flex-none"><a class="underline hover:no-underline" href="#">{{ $post->author->name }}</a></div>
+                            <div class="flex-none"><a class="underline hover:no-underline" href="{{ route('user.show', $post->author->username) }}">{{ $post->author->name }}</a></div>
                             <div class="flex-none">{{ $post->created_at }}</span></div>
                         </div>
                         <div>
@@ -88,13 +87,11 @@
                                 <button onclick="addComment()">Add Comment</button>
                             </div>
                         </div>
-                        <!-- TODO: Form for adding comments -->
 
                         <div id="commentsContainer">
                             @foreach($comments as $item)
                                 <div class="mt-4">
-                                    <!-- TODO: Fix link -->
-                                    <h4><a class="underline hover:no-underline" href="#">{{ $item->author->name }}</a> ({{ $item->created_at }})</h4>
+                                    <h4><a class="underline hover:no-underline" href="{{ route('user.show', $item->author->username) }}">{{ $item->author->name }}</a> ({{ $item->created_at }})</h4>
                                     <p class="px-2 italic">{{ $item->content }}</p>
                                 </div>
                             @endforeach

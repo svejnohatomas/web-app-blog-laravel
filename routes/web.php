@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,6 +79,12 @@ Route::controller(CommentController::class)->group(function () {
 
     // Delete
     Route::delete('/comments/delete/{id}', [CommentController::class, 'destroy'])->name('comment.destroy')->whereNumber('id');
+});
+
+// TODO: Add route constraints
+Route::controller(UserController::class)->group(function () {
+    // Read
+    Route::get('/users/{username}', [UserController::class, 'show'])->name('user.show');
 });
 
 require __DIR__.'/auth.php';

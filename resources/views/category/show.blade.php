@@ -59,7 +59,7 @@
 
                         <div class="flex flex-col sm:flex-row">
                             <div class="flex-1">
-                                <span>{{ $item->author->name }}</span>
+                                <a class="underline hover:no-underline" href="{{ route('user.show', $item->author->username) }}">{{ $item->author->name }}</a>
                             </div>
                             <div class="flex-none">
                                 @if($item->created_at != null)
