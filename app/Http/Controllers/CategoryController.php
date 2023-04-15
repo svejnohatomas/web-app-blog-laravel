@@ -26,7 +26,7 @@ class CategoryController extends Controller
         // TODO: Cache
         $categories = Category::query()
             ->orderByDesc('id')
-            ->get();
+            ->paginate();
 
         return \view('category.index', [
             CategoryController::$VIEW_DATA_CATEGORY_COLLECTION => $categories,

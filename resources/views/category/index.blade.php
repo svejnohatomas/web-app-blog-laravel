@@ -43,6 +43,10 @@
                     </div>
                 </article>
             @endforeach
+
+            <div class="mt-6 p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                {{ $categories->links() }}
+            </div>
         </div>
     </div>
 </x-app-layout>
