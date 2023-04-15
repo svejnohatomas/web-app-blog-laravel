@@ -37,7 +37,7 @@ class PostController extends Controller
             ->where('post_id', '=', $post->id)
             ->with('author')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate();
 
         return \view('post.show', [
             PostController::$VIEW_DATA_POST => $post,

@@ -139,6 +139,12 @@
                                     </div>
                                 </div>
                             @endforeach
+
+                            @if($comments->total() > $comments->perPage())
+                                <div class="mt-6">
+                                    {{ $comments->links() }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
