@@ -75,6 +75,13 @@
                     </div>
                 </article>
             @endforeach
+
+            @if($posts->total() > $posts->perPage())
+                <div class="mt-6 p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    {{ $posts->links() }}
+                </div>
+            @endif
+
         </div>
     </div>
 </x-app-layout>

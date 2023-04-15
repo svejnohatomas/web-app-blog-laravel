@@ -49,7 +49,7 @@ class CategoryController extends Controller
             ->where('posts.category_id', '=', $category->id)
             ->with('author')
             ->orderByDesc('posts.id')
-            ->get();
+            ->paginate();
 
         return \view('category.show', [
             CategoryController::$VIEW_DATA_CATEGORY => $category,
