@@ -8,6 +8,7 @@ use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -24,7 +25,7 @@ class CommentController extends Controller
         $validatedRequest = $request->validated();
 
         Comment::create([
-            'user_id' => $validatedRequest['user_id'],
+            'user_id' => Auth::id(),
             'post_id' => $validatedRequest['post_id'],
             'content' => $validatedRequest['content'],
         ]);
@@ -58,7 +59,9 @@ class CommentController extends Controller
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
-        $comment = Comment::query()->find($id);
+        $comment = Comment::query()
+            ->with('post')
+            ->find($id);
 
         if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
@@ -70,7 +73,7 @@ class CommentController extends Controller
 
         return redirect()->action(
             [PostController::class, 'show'],
-            ['id', $comment->post_id],
+            ['slug' => $comment->post->slug],
         );
     }
 

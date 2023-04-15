@@ -30,10 +30,11 @@
                         </div>
                         <div class="flex space-x-3 mt-2">
                             <div class="flex-1">
-                                <a href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
+                                <a class="underline hover:no-underline" href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
                             </div>
-                            <div class="flex-none">{{ $post->user->name }}</div>
-                            <div class="flex-none">{{ $post->created_at }}</div>
+                            <!-- TODO: Fix link -->
+                            <div class="flex-none"><a class="underline hover:no-underline" href="#">{{ $post->author->name }}</a></div>
+                            <div class="flex-none">{{ $post->created_at }}</span></div>
                         </div>
                         <div>
                             <p class="mt-6">{{ $post->content }}</p>
@@ -51,7 +52,6 @@
 
                                     if (new RegExp(".+").test(comment)) {
                                         let data = new FormData();
-                                        data.append("user_id", "{{ Auth::id() }}");
                                         data.append("post_id", "{{ $post->id }}");
                                         data.append("content", comment);
 
@@ -93,7 +93,8 @@
                         <div id="commentsContainer">
                             @foreach($comments as $item)
                                 <div class="mt-4">
-                                    <h4>{{ $item->user->name }} ({{ $item->created_at }})</h4>
+                                    <!-- TODO: Fix link -->
+                                    <h4><a class="underline hover:no-underline" href="#">{{ $item->author->name }}</a> ({{ $item->created_at }})</h4>
                                     <p class="px-2 italic">{{ $item->content }}</p>
                                 </div>
                             @endforeach

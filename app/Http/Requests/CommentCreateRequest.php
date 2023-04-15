@@ -25,7 +25,6 @@ class CommentCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:App\Models\User,id'],
             'post_id' => ['required', 'exists:App\Models\Post,id'],
             'content' => ['required'],
         ];

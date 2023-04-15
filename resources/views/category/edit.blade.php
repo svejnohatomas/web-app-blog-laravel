@@ -13,9 +13,7 @@
                 @csrf
 
                 <!-- Id -->
-                <div class="hidden">
-                    <x-text-input id="id" class="block mt-1 w-full" type="text" name="id" :value="old('id') ? old('id') : $category->id" required autofocus autocomplete="id" />
-                </div>
+                <x-text-input type="hidden" name="id" :value="old('id') ? old('id') : $category->id" readonly />
 
                 <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
                     <!-- Title -->
@@ -25,13 +23,6 @@
                         <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
 
-                    <!-- Slug -->
-                    <div>
-                        <x-input-label for="slug" :value="__('Slug')" />
-                        <x-text-input id="slug" class="block mt-1 w-full" type="text" name="slug" :value="$category->slug" readonly disabled />
-                        <x-input-error :messages="$errors->get('slug')" class="mt-2" />
-                    </div>
-
                     <!-- Description -->
                     <div>
                         <x-input-label for="description" :value="__('Description')" />
@@ -39,7 +30,7 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <!-- Create -->
+                    <!-- Update -->
                     <div class="flex items-center justify-end mt-4">
                         <x-primary-button class="ml-4">
                             {{ __('Update') }}

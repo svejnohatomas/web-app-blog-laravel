@@ -26,7 +26,7 @@ class PostController extends Controller
         $post = Post::query()
             ->where('slug', '=', $slug)
             ->with('category')
-            ->with('user')
+            ->with('author')
             ->first();
 
         if ($post == null) {
@@ -35,7 +35,7 @@ class PostController extends Controller
 
         $comments = Comment::query()
             ->where('post_id', '=', $post->id)
-            ->with('user')
+            ->with('author')
             ->orderByDesc('created_at')
             ->get();
 
@@ -52,11 +52,9 @@ class PostController extends Controller
         $category = Category::query()
             ->where('slug', '=', $categorySlug)
             ->first();
-        $userId = Auth::id();
 
         return \view('post.create', [
             PostController::$VIEW_DATA_CATEGORY => $category,
-            'userId' => $userId
         ]);
     }
 
@@ -69,7 +67,7 @@ class PostController extends Controller
 
         $post = Post::create([
             'category_id' => $validatedRequest['category_id'],
-            'user_id' => $validatedRequest['user_id'],
+            'user_id' => Auth::id(),
             'slug' => $validatedRequest['slug'],
             'title' => $validatedRequest['title'],
             'excerpt' => $validatedRequest['excerpt'],

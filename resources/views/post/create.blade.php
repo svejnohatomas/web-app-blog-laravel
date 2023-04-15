@@ -11,8 +11,7 @@
                   method="POST" action="{{ route('post.store') }}">
                 @csrf
 
-                <input type="hidden" name="category_id" value="{{ $category->id }}" readonly>
-                <input type="hidden" name="user_id" value="{{ $userId }}" readonly>
+                <x-text-input type="hidden" name="category_id" :value="old('category_id') ? old('category_id') : $category->id" readonly />
 
                 <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
                     <!-- Title -->
@@ -29,7 +28,7 @@
                         <x-input-error :messages="$errors->get('slug')" class="mt-2" />
                     </div>
 
-                    <!-- Description -->
+                    <!-- Excerpt -->
                     <div>
                         <x-input-label for="excerpt" :value="__('Excerpt')" />
                         <x-text-input id="excerpt" class="block mt-1 w-full" type="text" name="excerpt" :value="old('excerpt')" required autofocus autocomplete="excerpt" />
