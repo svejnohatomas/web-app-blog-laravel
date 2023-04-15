@@ -48,7 +48,6 @@ class CategoryController extends Controller
         $posts = Post::query()
             ->where('posts.category_id', '=', $category->id)
             ->with('author')
-            ->with('comments')
             ->orderByDesc('posts.id')
             ->get();
 
