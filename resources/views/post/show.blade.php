@@ -104,7 +104,7 @@
 
                         <div class="flex flex-col">
                             <div class="text-gray-800">
-                                <textarea id="commentInput" class="form-textarea w-full px-4 py-3 rounded" placeholder="Leave a comment..."></textarea>
+                                <textarea id="commentInput" class="form-textarea w-full px-4 py-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" placeholder="Leave a comment..."></textarea>
                             </div>
                             <div class="flex justify-end">
                                 <button onclick="addComment()">Add Comment</button>

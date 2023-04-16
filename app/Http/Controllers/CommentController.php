@@ -77,7 +77,7 @@ class CommentController extends Controller
         }
 
         $comment->update([
-            'content' => $validatedRequest->content,
+            'content' => $validatedRequest['content'],
         ]);
 
         return redirect()->action(
