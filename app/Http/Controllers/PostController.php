@@ -48,7 +48,6 @@ class PostController extends Controller
     // GET /categories/{categorySlug}/posts/create
     public function create(string $categorySlug): View
     {
-        // TODO: Authorize
         $category = Category::query()
             ->where('slug', '=', $categorySlug)
             ->first();
@@ -61,17 +60,13 @@ class PostController extends Controller
     // POST /posts/create
     public function store(PostCreateRequest $request): RedirectResponse
     {
-        // TODO: Authorize
-
-        $validatedRequest = $request->validated();
-
         $post = Post::create([
-            'category_id' => $validatedRequest['category_id'],
+            'category_id' => $request['category_id'],
             'user_id' => Auth::id(),
-            'slug' => $validatedRequest['slug'],
-            'title' => $validatedRequest['title'],
-            'excerpt' => $validatedRequest['excerpt'],
-            'content' => $validatedRequest['content'],
+            'slug' => $request['slug'],
+            'title' => $request['title'],
+            'excerpt' => $request['excerpt'],
+            'content' => $request['content'],
         ]);
 
         return redirect()->action(
@@ -83,7 +78,7 @@ class PostController extends Controller
     // GET: /posts/edit/{slug}
     public function edit(string $slug): View
     {
-        // TODO: Authorize - Resource owner authorization
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
 
         $post = Post::query()
             ->where('slug', '=', $slug)
@@ -101,11 +96,9 @@ class PostController extends Controller
     // PUT: /posts/edit/{id}
     public function update(PostUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
 
-        $validatedRequest = $request->validated();
-
-        if ($validatedRequest['id'] != $id) {
+        if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
@@ -116,9 +109,9 @@ class PostController extends Controller
         }
 
         $post->update([
-            'title' => $validatedRequest['title'],
-            'excerpt' => $validatedRequest['excerpt'],
-            'content' => $validatedRequest['content'],
+            'title' => $request['title'],
+            'excerpt' => $request['excerpt'],
+            'content' => $request['content'],
         ]);
 
         return redirect()->action(
@@ -130,7 +123,7 @@ class PostController extends Controller
     // DELETE: /posts/delete/{id}
     public function destroy(PostDeleteRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
 
         $post = Post::query()
             ->with('category')

@@ -13,7 +13,6 @@ class PostUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: Authorized user only
         return true;
     }
 

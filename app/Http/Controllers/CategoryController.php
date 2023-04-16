@@ -8,7 +8,6 @@ use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -19,11 +18,8 @@ class CategoryController extends Controller
     public static string $VIEW_DATA_POST_COLLECTION = 'posts';
 
     // GET /categories
-    public function index(Request $request): View
+    public function index(): View
     {
-        // TODO: Paginate
-
-        // TODO: Cache
         $categories = Category::query()
             ->orderByDesc('id')
             ->paginate();
@@ -44,7 +40,6 @@ class CategoryController extends Controller
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        // TODO: Pagination
         $posts = Post::query()
             ->where('posts.category_id', '=', $category->id)
             ->with('author')
@@ -60,7 +55,7 @@ class CategoryController extends Controller
     // GET /categories/create
     public function create(): View
     {
-        // TODO: Authorize
+        // TODO: Authorize - Moderator | Admin
 
         return \view('category.create');
     }
@@ -68,14 +63,12 @@ class CategoryController extends Controller
     // POST /categories/create
     public function store(CategoryCreateRequest $request): RedirectResponse
     {
-        // TODO: Authorize
-
-        $validatedRequest = $request->validated();
+        // TODO: Authorize - Moderator | Admin
 
         $category = Category::create([
-            'slug' => $validatedRequest['slug'],
-            'title' => $validatedRequest['title'],
-            'description' => $validatedRequest['description'],
+            'slug' => $request['slug'],
+            'title' => $request['title'],
+            'description' => $request['description'],
         ]);
 
         return redirect()->action(
@@ -87,7 +80,7 @@ class CategoryController extends Controller
     // GET: /categories/edit/{slug}
     public function edit(string $slug): View
     {
-        // TODO: Authorize
+        // TODO: Authorize - Moderator | Admin
 
         $category = Category::query()
             ->where('slug', $slug)
@@ -105,11 +98,9 @@ class CategoryController extends Controller
     // PUT: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize
+        // TODO: Authorize - Moderator | Admin
 
-        $validatedRequest = $request->validated();
-
-        if ($validatedRequest['id'] != $id) {
+        if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
@@ -120,8 +111,8 @@ class CategoryController extends Controller
         }
 
         $category->update([
-            'title' => $validatedRequest['title'],
-            'description' => $validatedRequest['description'],
+            'title' => $request['title'],
+            'description' => $request['description'],
         ]);
 
         return redirect()->action(
@@ -133,7 +124,7 @@ class CategoryController extends Controller
     // DELETE: /categories/delete/{id}
     public function destroy(CategoryDeleteRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize
+        // TODO: Authorize - Moderator | Admin
 
         $category = Category::query()->find($id);
 

@@ -13,7 +13,6 @@ class PostCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: Authorized user only
         return true;
     }
 

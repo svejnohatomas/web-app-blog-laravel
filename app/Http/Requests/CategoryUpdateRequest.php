@@ -13,7 +13,6 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: Admin only
         return true;
     }
 

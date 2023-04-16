@@ -21,14 +21,10 @@ class CommentController extends Controller
     // POST /comments/create
     public function store(CommentCreateRequest $request): JsonResponse
     {
-        // TODO: Authorize
-
-        $validatedRequest = $request->validated();
-
         $comment = Comment::create([
             'user_id' => Auth::id(),
-            'post_id' => $validatedRequest['post_id'],
-            'content' => $validatedRequest['content'],
+            'post_id' => $request['post_id'],
+            'content' => $request['content'],
         ]);
 
         $user = Auth::user();
@@ -45,7 +41,7 @@ class CommentController extends Controller
     // GET /comments/edit/{id}
     public function edit(int $id): View
     {
-        // TODO: Authorize - Resource owner authorization
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
 
         $comment = Comment::query()->find($id);
 
@@ -60,11 +56,9 @@ class CommentController extends Controller
     // PUT /comments/edit/{id}
     public function update(CommentUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
 
-        $validatedRequest = $request->validated();
-
-        if ($validatedRequest['id'] != $id) {
+        if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
 
@@ -77,7 +71,7 @@ class CommentController extends Controller
         }
 
         $comment->update([
-            'content' => $validatedRequest['content'],
+            'content' => $request['content'],
         ]);
 
         return redirect()->action(
@@ -89,6 +83,8 @@ class CommentController extends Controller
     // DELETE /comments/delete/{id}
     public function destroy(CommentDeleteRequest $request, int $id): Response
     {
+        // TODO: Authorize - Resource owner authorization | Moderator | Admin
+
         $comment = Comment::query()->find($id);
 
         if ($comment == null) {

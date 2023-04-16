@@ -13,7 +13,6 @@ class CommentCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: Authorized user only
         return true;
     }
 

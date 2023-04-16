@@ -13,7 +13,6 @@ class CommentDeleteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: Authorized user only
         return true;
     }
 
