@@ -19,21 +19,21 @@
                     <!-- Title -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" type="text" name="title" :value="old('title') ? old('title') : $post->title" required autofocus autocomplete="title" />
+                        <x-text-input id="title" type="text" name="title" :value="old('title') ? old('title') : $post->title" required autofocus autocomplete="title" placeholder="{{ __('Title') }}" />
                         <x-input-error :messages="$errors->get('title')" />
                     </div>
 
                     <!-- Excerpt -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="excerpt" :value="__('Excerpt')" />
-                        <x-text-input id="excerpt" type="text" name="excerpt" :value="old('excerpt') ? old('excerpt') : $post->excerpt" required autofocus autocomplete="excerpt" />
+                        <x-text-input id="excerpt" type="text" name="excerpt" :value="old('excerpt') ? old('excerpt') : $post->excerpt" required autofocus autocomplete="excerpt" placeholder="{{ __('Excerpt') }}" />
                         <x-input-error :messages="$errors->get('excerpt')" />
                     </div>
 
                     <!-- Content -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="content" :value="__('Content')" />
-                        <x-text-input id="content" type="text" name="content" :value="old('content') ? old('content') : $post->content" required autofocus autocomplete="content" />
+                        <x-text-input id="content" type="text" name="content" :value="old('content') ? old('content') : $post->content" required autofocus autocomplete="content" placeholder="{{ __('Content') }}" />
                         <x-input-error :messages="$errors->get('content')" />
                     </div>
 

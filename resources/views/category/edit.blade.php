@@ -19,14 +19,14 @@
                     <!-- Title -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" type="text" name="title" :value="old('title') ? old('title') : $category->title" required autofocus autocomplete="title" />
+                        <x-text-input id="title" type="text" name="title" :value="old('title') ? old('title') : $category->title" required autofocus autocomplete="title" placeholder="{{ __('Title') }}" />
                         <x-input-error :messages="$errors->get('title')" />
                     </div>
 
                     <!-- Description -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="description" :value="__('Description')" />
-                        <x-textarea-input id="description" type="text" name="description" required autofocus autocomplete="description">{{ old('description') ? old('description') : $category->description }}</x-textarea-input>
+                        <x-textarea-input id="description" type="text" name="description" required autofocus autocomplete="description" placeholder="{{ __('Description') }}">{{ old('description') ? old('description') : $category->description }}</x-textarea-input>
                         <x-input-error :messages="$errors->get('description')" />
                     </div>
 

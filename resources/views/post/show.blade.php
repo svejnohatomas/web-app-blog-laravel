@@ -1,4 +1,3 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex space-x-3 items-center">
@@ -106,10 +105,10 @@
 
                         <div class="flex flex-col space-y-3">
                             <div>
-                                <x-textarea-input id="commentInput" placeholder="Leave a comment..."></x-textarea-input>
+                                <x-textarea-input id="commentInput" placeholder="{{ __('Leave a comment...') }}"></x-textarea-input>
                             </div>
                             <div class="flex justify-end">
-                                <x-primary-button onclick="addComment()">Add Comment</x-primary-button>
+                                <x-primary-button onclick="addComment()">{{ __('Add Comment') }}</x-primary-button>
                             </div>
                         </div>
 

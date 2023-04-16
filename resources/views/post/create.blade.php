@@ -17,28 +17,28 @@
                     <!-- Title -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" />
+                        <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" placeholder="{{ __('Title') }}" />
                         <x-input-error :messages="$errors->get('title')" />
                     </div>
 
                     <!-- Slug -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="slug" :value="__('Slug')" />
-                        <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" />
+                        <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" placeholder="{{ __('Slug') }}" />
                         <x-input-error :messages="$errors->get('slug')" />
                     </div>
 
                     <!-- Excerpt -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="excerpt" :value="__('Excerpt')" />
-                        <x-text-input id="excerpt" type="text" name="excerpt" :value="old('excerpt')" required autofocus autocomplete="excerpt" />
+                        <x-text-input id="excerpt" type="text" name="excerpt" :value="old('excerpt')" required autofocus autocomplete="excerpt" placeholder="{{ __('Excerpt') }}" />
                         <x-input-error :messages="$errors->get('excerpt')" />
                     </div>
 
                     <!-- Content -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="content" :value="__('Content')" />
-                        <x-text-input id="content" type="text" name="content" :value="old('content')" required autofocus autocomplete="content" />
+                        <x-text-input id="content" type="text" name="content" :value="old('content')" required autofocus autocomplete="content" placeholder="{{ __('Content') }}" />
                         <x-input-error :messages="$errors->get('content')" />
                     </div>
 

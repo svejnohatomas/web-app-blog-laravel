@@ -18,7 +18,7 @@
                     <!-- Content -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="content" :value="__('Content')" />
-                        <x-textarea-input id="content" name="content" required autofocus autocomplete="content" placeholder="Your comment">{{ old('content') ? old('content') : $comment->content }}</x-textarea-input>
+                        <x-textarea-input id="content" name="content" required autofocus autocomplete="content" placeholder="{{ __('Your comment') }}">{{ old('content') ? old('content') : $comment->content }}</x-textarea-input>
                         <x-input-error :messages="$errors->get('content')" />
                     </div>
 
