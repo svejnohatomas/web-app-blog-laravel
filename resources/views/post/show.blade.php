@@ -1,20 +1,22 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex space-x-3">
+        <div class="flex space-x-3 items-center">
             <div class="flex-1">
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     {{ $post->title }}
                 </h2>
             </div>
             <div class="flex-none text-gray-800 dark:text-gray-200">
-                <a href="{{ route('post.edit', ['slug' => $post->slug]) }}">{{ __('Edit') }}</a>
+                <a href="{{ route('post.edit', ['slug' => $post->slug]) }}">
+                    <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
+                </a>
             </div>
             <div class="flex-none text-gray-800 dark:text-gray-200">
                 <form method="POST" action="{{ route('post.destroy', ['id' => $post->id]) }}">
                     @method('DELETE')
                     @csrf
-                    <button>Delete</button>
+                    <x-danger-button>{{ __('Delete') }}</x-danger-button>
                 </form>
             </div>
         </div>
@@ -80,7 +82,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <article class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="flex flex-col space-y-8 p-6 text-gray-900 dark:text-gray-100">
                     <div>
                         <div class="text-gray-700 dark:text-gray-300 font-bold">
@@ -97,58 +99,29 @@
                             <p class="mt-6">{{ $post->content }}</p>
                         </div>
                     </div>
-                    <div class="flex flex-col space-y-3">
+                    <div class="flex flex-col space-y-4">
                         <div>
                             <h3 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Comments') }}</h3>
                         </div>
 
-                        <div class="flex flex-col">
-                            <div class="text-gray-800">
-                                <textarea id="commentInput" class="form-textarea w-full px-4 py-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" placeholder="Leave a comment..."></textarea>
+                        <div class="flex flex-col space-y-3">
+                            <div>
+                                <x-textarea-input id="commentInput" placeholder="Leave a comment..."></x-textarea-input>
                             </div>
                             <div class="flex justify-end">
-                                <button onclick="addComment()">Add Comment</button>
+                                <x-primary-button onclick="addComment()">Add Comment</x-primary-button>
                             </div>
                         </div>
 
-                        <div id="commentsContainer">
+                        <div id="commentsContainer" class="flex flex-col pt-4 space-y-6">
                             @foreach($comments as $item)
-                                <div id="comment{{$item->id}}" class="mt-4">
-                                    <div class="flex space-x-3">
-                                        <div class="flex-1">
-                                            <h4>
-                                                <a class="underline hover:no-underline" href="{{ route('user.show', $item->author->username) }}">
-                                                    {{ $item->author->name }}
-                                                </a> ({{ $item->created_at }})
-                                            </h4>
-                                        </div>
-                                        <div class="flex-none text-gray-800 dark:text-gray-200">
-                                            <a href="{{ route('comment.edit', ['id' => $item->id]) }}">{{ __('Edit') }}</a>
-                                        </div>
-                                        <div class="flex-none text-gray-800 dark:text-gray-200">
-                                            <form id="commentForm{{ $item->id }}" method="POST" action="{{ route('comment.destroy', ['id' => $item->id]) }}">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button onclick="removeComment('{{ $item->id }}')">Delete</button>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                    <div>
-                                        <p class="px-2 italic">{{ $item->content }}</p>
-                                    </div>
-                                </div>
+                                <x-post-comment-card id="comment{{$item->id}}" :comment="$item" />
                             @endforeach
-
-                            @if($comments->total() > $comments->perPage())
-                                <div class="mt-6">
-                                    {{ $comments->links() }}
-                                </div>
-                            @endif
                         </div>
                     </div>
+                    <x-pagination :paginator="$comments" />
                 </div>
-            </article>
+            </div>
         </div>
     </div>
 </x-app-layout>

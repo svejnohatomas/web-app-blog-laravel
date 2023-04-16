@@ -13,31 +13,29 @@
 
                 <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
                     <!-- Title -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" />
-                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                        <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" placeholder="{{ __('Title') }}" />
+                        <x-input-error :messages="$errors->get('title')" />
                     </div>
 
                     <!-- Slug -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="slug" :value="__('Slug')" />
-                        <x-text-input id="slug" class="block mt-1 w-full" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" />
-                        <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                        <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" placeholder="{{ __('Slug') }}" />
+                        <x-input-error :messages="$errors->get('slug')" />
                     </div>
 
                     <!-- Description -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="description" :value="__('Description')" />
-                        <x-text-input id="description" class="block mt-1 w-full" type="text" name="description" :value="old('description')" required autofocus autocomplete="description" />
-                        <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                        <x-textarea-input id="description" type="text" name="description" :value="old('description')" required autofocus autocomplete="description" placeholder="{{ __('Description') }}" />
+                        <x-input-error :messages="$errors->get('description')" />
                     </div>
 
                     <!-- Create -->
-                    <div class="flex items-center justify-end mt-4">
-                        <x-primary-button class="ml-4">
-                            {{ __('Create') }}
-                        </x-primary-button>
+                    <div class="flex items-center justify-end">
+                        <x-primary-button>{{ __('Create') }}</x-primary-button>
                     </div>
                 </div>
             </form>

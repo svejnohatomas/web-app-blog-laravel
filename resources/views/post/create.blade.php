@@ -15,38 +15,36 @@
 
                 <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
                     <!-- Title -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" />
-                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                        <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus autocomplete="title" />
+                        <x-input-error :messages="$errors->get('title')" />
                     </div>
 
                     <!-- Slug -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="slug" :value="__('Slug')" />
-                        <x-text-input id="slug" class="block mt-1 w-full" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" />
-                        <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                        <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required autofocus autocomplete="slug" />
+                        <x-input-error :messages="$errors->get('slug')" />
                     </div>
 
                     <!-- Excerpt -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="excerpt" :value="__('Excerpt')" />
-                        <x-text-input id="excerpt" class="block mt-1 w-full" type="text" name="excerpt" :value="old('excerpt')" required autofocus autocomplete="excerpt" />
-                        <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
+                        <x-text-input id="excerpt" type="text" name="excerpt" :value="old('excerpt')" required autofocus autocomplete="excerpt" />
+                        <x-input-error :messages="$errors->get('excerpt')" />
                     </div>
 
                     <!-- Content -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="content" :value="__('Content')" />
-                        <x-text-input id="content" class="block mt-1 w-full" type="text" name="content" :value="old('content')" required autofocus autocomplete="content" />
-                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                        <x-text-input id="content" type="text" name="content" :value="old('content')" required autofocus autocomplete="content" />
+                        <x-input-error :messages="$errors->get('content')" />
                     </div>
 
                     <!-- Create -->
-                    <div class="flex items-center justify-end mt-4">
-                        <x-primary-button class="ml-4">
-                            {{ __('Create') }}
-                        </x-primary-button>
+                    <div class="flex items-center justify-end">
+                        <x-primary-button>{{ __('Create') }}</x-primary-button>
                     </div>
                 </div>
             </form>

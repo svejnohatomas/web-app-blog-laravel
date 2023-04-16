@@ -16,17 +16,15 @@
 
                 <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
                     <!-- Content -->
-                    <div>
+                    <div class="flex flex-col space-y-2">
                         <x-input-label for="content" :value="__('Content')" />
-                        <textarea id="content" name="content" class="mt-2 form-textarea w-full px-4 py-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required autofocus autocomplete="content" placeholder="Your comment">{{ old('content') ? old('content') : $comment->content }}</textarea>
-                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                        <x-textarea-input id="content" name="content" required autofocus autocomplete="content" placeholder="Your comment">{{ old('content') ? old('content') : $comment->content }}</x-textarea-input>
+                        <x-input-error :messages="$errors->get('content')" />
                     </div>
 
                     <!-- Update -->
-                    <div class="flex items-center justify-end mt-4">
-                        <x-primary-button class="ml-4">
-                            {{ __('Update') }}
-                        </x-primary-button>
+                    <div class="flex items-center justify-end">
+                        <x-primary-button>{{ __('Update') }}</x-primary-button>
                     </div>
                 </div>
             </form>
