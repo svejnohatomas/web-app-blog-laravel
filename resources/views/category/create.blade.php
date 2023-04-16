@@ -29,7 +29,7 @@
                     <!-- Description -->
                     <div class="flex flex-col space-y-2">
                         <x-input-label for="description" :value="__('Description')" />
-                        <x-textarea-input id="description" type="text" name="description" :value="old('description')" required autofocus autocomplete="description" placeholder="{{ __('Description') }}" />
+                        <x-textarea-input id="description" type="text" name="description" required autofocus autocomplete="description" placeholder="{{ __('Description') }}">{{ old('description') }}</x-textarea-input>
                         <x-input-error :messages="$errors->get('description')" />
                     </div>
 
