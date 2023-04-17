@@ -8,6 +8,7 @@ use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -55,7 +56,9 @@ class CategoryController extends Controller
     // GET /categories/create
     public function create(): View
     {
-        // TODO: Authorize - Moderator | Admin
+        if (Gate::none(['admin', 'moderator'])) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
 
         return \view('category.create');
     }
@@ -63,7 +66,9 @@ class CategoryController extends Controller
     // POST /categories/create
     public function store(CategoryCreateRequest $request): RedirectResponse
     {
-        // TODO: Authorize - Moderator | Admin
+        if (Gate::none(['admin', 'moderator'])) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
 
         $category = Category::create([
             'slug' => $request['slug'],
@@ -80,7 +85,9 @@ class CategoryController extends Controller
     // GET: /categories/edit/{slug}
     public function edit(string $slug): View
     {
-        // TODO: Authorize - Moderator | Admin
+        if (Gate::none(['admin', 'moderator'])) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
 
         $category = Category::query()
             ->where('slug', $slug)
@@ -98,7 +105,9 @@ class CategoryController extends Controller
     // PUT: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize - Moderator | Admin
+        if (Gate::none(['admin', 'moderator'])) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
 
         if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
@@ -124,7 +133,9 @@ class CategoryController extends Controller
     // DELETE: /categories/delete/{id}
     public function destroy(CategoryDeleteRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize - Moderator | Admin
+        if (Gate::none(['admin', 'moderator'])) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
 
         $category = Category::query()->find($id);
 

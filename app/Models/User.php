@@ -52,4 +52,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function isAdministrator()
+    {
+        return $this->is_administrator;
+    }
+
+    public function isModerator()
+    {
+        return $this->is_moderator;
+    }
 }
