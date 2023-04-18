@@ -26,6 +26,10 @@ class UserController extends Controller
             abort(ResponseAlias::HTTP_NOT_FOUND);
         }
 
+        if ($request->user()->cannot('view', $user)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         $show = strtolower($request->query('show', 'posts'));
 
         if ($show == 'posts') {

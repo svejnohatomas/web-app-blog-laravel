@@ -27,19 +27,34 @@ class PostPolicy
         return null;
     }
 
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    public function view(User $user, Post $resource): bool
+    {
+        return true;
+    }
+
+    public function create(User $user): bool
+    {
+        return true;
+    }
+
     /**
      * Determine if the given post can be updated by the user.
      */
-    public function update(User $user, Post $post): bool
+    public function update(User $user, Post $resource): bool
     {
-        return $user->id === $post->user_id;
+        return $user->id === $resource->user_id;
     }
 
     /**
      * Determine if the given post can be destroyed by the user.
      */
-    public function delete(User $user, Post $post): bool
+    public function delete(User $user, Post $resource): bool
     {
-        return $user->id === $post->user_id;
+        return $user->id === $resource->user_id;
     }
 }

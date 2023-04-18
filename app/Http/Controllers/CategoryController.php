@@ -8,7 +8,7 @@ use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -19,8 +19,12 @@ class CategoryController extends Controller
     public static string $VIEW_DATA_POST_COLLECTION = 'posts';
 
     // GET /categories
-    public function index(): View
+    public function index(Request $request): View
     {
+        if ($request->user()->cannot('viewAny', Category::class)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         $categories = Category::query()
             ->orderByDesc('id')
             ->paginate();
@@ -31,7 +35,7 @@ class CategoryController extends Controller
     }
 
     // GET /categories/{slug}
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $category = Category::query()
             ->where('slug', '=', $slug)
@@ -39,6 +43,10 @@ class CategoryController extends Controller
 
         if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('view', $category)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $posts = Post::query()
@@ -54,9 +62,9 @@ class CategoryController extends Controller
     }
 
     // GET /categories/create
-    public function create(): View
+    public function create(Request $request): View
     {
-        if (Gate::none(['admin'])) {
+        if ($request->user()->cannot('create', Category::class)) {
             abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
@@ -66,7 +74,7 @@ class CategoryController extends Controller
     // POST /categories/create
     public function store(CategoryCreateRequest $request): RedirectResponse
     {
-        if (Gate::none(['admin'])) {
+        if ($request->user()->cannot('create', Category::class)) {
             abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
@@ -83,18 +91,18 @@ class CategoryController extends Controller
     }
 
     // GET: /categories/edit/{slug}
-    public function edit(string $slug): View
+    public function edit(Request $request, string $slug): View
     {
-        if (Gate::none(['admin', 'moderator'])) {
-            abort(ResponseAlias::HTTP_FORBIDDEN);
-        }
-
         $category = Category::query()
             ->where('slug', $slug)
             ->first();
 
         if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $category)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return \view('category.edit', [
@@ -105,10 +113,6 @@ class CategoryController extends Controller
     // PUT: /categories/edit/{id}
     public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
-        if (Gate::none(['admin', 'moderator'])) {
-            abort(ResponseAlias::HTTP_FORBIDDEN);
-        }
-
         if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
@@ -117,6 +121,10 @@ class CategoryController extends Controller
 
         if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $category)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $category->update([
@@ -133,14 +141,14 @@ class CategoryController extends Controller
     // DELETE: /categories/delete/{id}
     public function destroy(CategoryDeleteRequest $request, int $id): RedirectResponse
     {
-        if (Gate::none(['admin'])) {
-            abort(ResponseAlias::HTTP_FORBIDDEN);
-        }
-
         $category = Category::query()->find($id);
 
         if ($category == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('delete', $category)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $category->delete();

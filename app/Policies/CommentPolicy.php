@@ -27,19 +27,34 @@ class CommentPolicy
         return null;
     }
 
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    public function view(User $user, Comment $resource): bool
+    {
+        return true;
+    }
+
+    public function create(User $user): bool
+    {
+        return true;
+    }
+
     /**
      * Determine if the given comment can be updated by the user.
      */
-    public function update(User $user, Comment $comment): bool
+    public function update(User $user, Comment $resource): bool
     {
-        return $user->id === $comment->user_id;
+        return $user->id === $resource->user_id;
     }
 
     /**
      * Determine if the given comment can be destroyed by the user.
      */
-    public function delete(User $user, Comment $comment): bool
+    public function delete(User $user, Comment $resource): bool
     {
-        return $user->id === $comment->user_id;
+        return $user->id === $resource->user_id;
     }
 }

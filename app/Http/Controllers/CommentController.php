@@ -22,6 +22,10 @@ class CommentController extends Controller
     // POST /comments/create
     public function store(CommentCreateRequest $request): JsonResponse
     {
+        if ($request->user()->cannot('create', Comment::class)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         $comment = Comment::create([
             'user_id' => Auth::id(),
             'post_id' => $request['post_id'],

@@ -22,7 +22,7 @@ class PostController extends Controller
     public static string $VIEW_DATA_COMMENT_COLLECTION = 'comments';
 
     // GET /posts/{slug}
-    public function show(string $slug): View
+    public function show(Request $request, string $slug): View
     {
         $post = Post::query()
             ->where('slug', '=', $slug)
@@ -32,6 +32,10 @@ class PostController extends Controller
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('view', $post)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $comments = Comment::query()
@@ -47,8 +51,12 @@ class PostController extends Controller
     }
 
     // GET /categories/{categorySlug}/posts/create
-    public function create(string $categorySlug): View
+    public function create(Request $request, string $categorySlug): View
     {
+        if ($request->user()->cannot('create', Post::class)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         $category = Category::query()
             ->where('slug', '=', $categorySlug)
             ->first();
@@ -61,6 +69,10 @@ class PostController extends Controller
     // POST /posts/create
     public function store(PostCreateRequest $request): RedirectResponse
     {
+        if ($request->user()->cannot('create', Post::class)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         $post = Post::create([
             'category_id' => $request['category_id'],
             'user_id' => Auth::id(),
