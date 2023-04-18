@@ -15,18 +15,22 @@
                     <span>({{ $comment->created_at }})</span>
                 @endif
             </div>
-            <div class="flex-none">
-                <a href="{{ route('comment.edit', ['id' => $comment->id]) }}">
-                    <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
-                </a>
-            </div>
-            <div class="flex-none">
-                <form method="POST" action="{{ route('comment.destroy', ['id' => $comment->id]) }}">
-                    @method('DELETE')
-                    @csrf
-                    <x-danger-button>{{ __('Delete') }}</x-danger-button>
-                </form>
-            </div>
+            @can('update', $comment)
+                <div class="flex-none">
+                    <a href="{{ route('comment.edit', ['id' => $comment->id]) }}">
+                        <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
+                    </a>
+                </div>
+            @endcan
+            @can('delete', $comment)
+                <div class="flex-none">
+                    <form method="POST" action="{{ route('comment.destroy', ['id' => $comment->id]) }}">
+                        @method('DELETE')
+                        @csrf
+                        <x-danger-button>{{ __('Delete') }}</x-danger-button>
+                    </form>
+                </div>
+            @endcan
         </div>
 
         <div class="my-3">

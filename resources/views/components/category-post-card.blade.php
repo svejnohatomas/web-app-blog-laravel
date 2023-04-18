@@ -1,12 +1,14 @@
 @props(['post'])
 
 <article
-    class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-    <div class="flex flex-col space-y-4 p-6 text-gray-900 dark:text-gray-100">
+    {{ $attributes->merge(['class' => 'bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg']) }}>
+    <div class="flex flex-col space-y-3 p-6 text-gray-900 dark:text-gray-100">
 
-        <div class="flex space-x-3 items-center">
+        <div class="flex space-x-3">
             <div class="flex-1">
-                <h3 class="font-bold text-lg">{{ $post->title }}</h3>
+                <a href="{{ route('post.show', ['slug' => $post->slug]) }}">
+                    <h3 class="font-bold text-lg">{{ $post->title }}</h3>
+                </a>
             </div>
             @can('update', $post)
                 <div class="flex-none">
@@ -26,13 +28,14 @@
             @endcan
         </div>
 
-        <div class="my-3">
+        <div>
             <p>{{ $post->excerpt }}</p>
         </div>
 
         <div class="flex flex-col sm:flex-row">
             <div class="flex-1">
-                <a class="underline hover:no-underline" href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
+                <a class="underline hover:no-underline"
+                   href="{{ route('user.show', $post->author->username) }}">{{ $post->author->name }}</a>
             </div>
             <div class="flex-none">
                 @if($post->created_at != null)

@@ -1,3 +1,4 @@
+@php use App\Models\Comment; @endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex space-x-3 items-center">
@@ -6,22 +7,27 @@
                     {{ $post->title }}
                 </h2>
             </div>
-            <div class="flex-none text-gray-800 dark:text-gray-200">
-                <a href="{{ route('post.edit', ['slug' => $post->slug]) }}">
-                    <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
-                </a>
-            </div>
-            <div class="flex-none text-gray-800 dark:text-gray-200">
-                <form method="POST" action="{{ route('post.destroy', ['id' => $post->id]) }}">
-                    @method('DELETE')
-                    @csrf
-                    <x-danger-button>{{ __('Delete') }}</x-danger-button>
-                </form>
-            </div>
+            @can('update', $post)
+                <div class="flex-none text-gray-800 dark:text-gray-200">
+                    <a href="{{ route('post.edit', ['slug' => $post->slug]) }}">
+                        <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
+                    </a>
+                </div>
+            @endcan
+            @can('delete', $post)
+                <div class="flex-none text-gray-800 dark:text-gray-200">
+                    <form method="POST" action="{{ route('post.destroy', ['id' => $post->id]) }}">
+                        @method('DELETE')
+                        @csrf
+                        <x-danger-button>{{ __('Delete') }}</x-danger-button>
+                    </form>
+                </div>
+            @endcan
         </div>
     </x-slot>
 
     <script>
+        <!-- TODO: FIX JS SCRIPTS -->
         function addComment() {
             let comment = document.getElementById("commentInput").value;
 
@@ -89,9 +95,13 @@
                         </div>
                         <div class="flex space-x-3 mt-2">
                             <div class="flex-1">
-                                <a class="underline hover:no-underline" href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
+                                <a class="underline hover:no-underline"
+                                   href="{{ route('category.show', $post->category->slug) }}">{{ $post->category->title }}</a>
                             </div>
-                            <div class="flex-none"><a class="underline hover:no-underline" href="{{ route('user.show', $post->author->username) }}">{{ $post->author->name }}</a></div>
+                            <div class="flex-none">
+                                <a class="underline hover:no-underline"
+                                   href="{{ route('user.show', $post->author->username) }}">{{ $post->author->name }}</a>
+                            </div>
                             <div class="flex-none">{{ $post->created_at }}</span></div>
                         </div>
                         <div>
@@ -103,22 +113,28 @@
                             <h3 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Comments') }}</h3>
                         </div>
 
-                        <div class="flex flex-col space-y-3">
-                            <div>
-                                <x-textarea-input id="commentInput" placeholder="{{ __('Leave a comment...') }}"></x-textarea-input>
+                        @can('create', Comment::class)
+                            <div class="flex flex-col space-y-3">
+                                <div>
+                                    <x-textarea-input id="commentInput"
+                                                      placeholder="{{ __('Leave a comment...') }}"></x-textarea-input>
+                                </div>
+                                <div class="flex justify-end">
+                                    <x-primary-button onclick="addComment()">{{ __('Add Comment') }}</x-primary-button>
+                                </div>
                             </div>
-                            <div class="flex justify-end">
-                                <x-primary-button onclick="addComment()">{{ __('Add Comment') }}</x-primary-button>
+                        @endcan
+                        @can('viewAny', Comment::class)
+                            <div id="commentsContainer" class="flex flex-col pt-4 space-y-6">
+                                @foreach($comments as $item)
+                                    <x-post-comment-card id="comment{{$item->id}}" :comment="$item"/>
+                                @endforeach
                             </div>
-                        </div>
-
-                        <div id="commentsContainer" class="flex flex-col pt-4 space-y-6">
-                            @foreach($comments as $item)
-                                <x-post-comment-card id="comment{{$item->id}}" :comment="$item" />
-                            @endforeach
-                        </div>
+                        @endcan
                     </div>
-                    <x-pagination :paginator="$comments" />
+                    @can('viewAny', Comment::class)
+                        <x-pagination :paginator="$comments"/>
+                    @endcan
                 </div>
             </div>
         </div>

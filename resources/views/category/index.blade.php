@@ -1,3 +1,4 @@
+@php use App\Models\Category; @endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex space-x-3 items-center">
@@ -6,11 +7,13 @@
                     {{ __('Categories') }}
                 </h2>
             </div>
-            <div class="flex-none">
-                <a href="{{ route('category.create') }}">
-                    <x-primary-button>{{ __('New Category') }}</x-primary-button>
-                </a>
-            </div>
+            @can('create', Category::class)
+                <div class="flex-none">
+                    <a href="{{ route('category.create') }}">
+                        <x-primary-button>{{ __('New Category') }}</x-primary-button>
+                    </a>
+                </div>
+            @endcan
         </div>
     </x-slot>
 

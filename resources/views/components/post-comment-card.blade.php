@@ -9,21 +9,24 @@
                 </a> ({{ $comment->created_at }})
             </h4>
         </div>
-        <div class="flex-none text-gray-800 dark:text-gray-200">
-            <a href="{{ route('comment.edit', ['id' => $comment->id]) }}">
-                <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
-            </a>
-        </div>
-        <div class="flex-none text-gray-800 dark:text-gray-200">
-            <form id="commentForm{{ $comment->id }}" method="POST" action="{{ route('comment.destroy', ['id' => $comment->id]) }}">
-                @method('DELETE')
-                @csrf
-                <button onclick="removeComment('{{ $comment->id }}')">
-                    <x-danger-button>{{ __('Delete') }}</x-danger-button>
-                </button>
-            </form>
-        </div>
-
+        @can('update', $comment)
+            <div class="flex-none text-gray-800 dark:text-gray-200">
+                <a href="{{ route('comment.edit', ['id' => $comment->id]) }}">
+                    <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
+                </a>
+            </div>
+        @endcan
+        @can('delete', $comment)
+            <div class="flex-none text-gray-800 dark:text-gray-200">
+                <form id="commentForm{{ $comment->id }}" method="POST" action="{{ route('comment.destroy', ['id' => $comment->id]) }}">
+                    @method('DELETE')
+                    @csrf
+                    <button onclick="removeComment('{{ $comment->id }}')">
+                        <x-danger-button>{{ __('Delete') }}</x-danger-button>
+                    </button>
+                </form>
+            </div>
+        @endcan
     </div>
     <div class="mt-3">
         <p class="px-2 italic">{{ $comment->content }}</p>
