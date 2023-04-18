@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -76,16 +77,18 @@ class PostController extends Controller
     }
 
     // GET: /posts/edit/{slug}
-    public function edit(string $slug): View
+    public function edit(Request $request, string $slug): View
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         $post = Post::query()
             ->where('slug', '=', $slug)
             ->first();
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $post)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return \view('post.edit', [
@@ -96,8 +99,6 @@ class PostController extends Controller
     // PUT: /posts/edit/{id}
     public function update(PostUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
@@ -106,6 +107,10 @@ class PostController extends Controller
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $post)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $post->update([
@@ -123,14 +128,16 @@ class PostController extends Controller
     // DELETE: /posts/delete/{id}
     public function destroy(PostDeleteRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         $post = Post::query()
             ->with('category')
             ->find($id);
 
         if ($post == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('delete', $post)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $post->delete();

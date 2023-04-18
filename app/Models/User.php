@@ -55,11 +55,11 @@ class User extends Authenticatable
 
     public function isAdministrator()
     {
-        return $this->is_administrator;
+        return $this->role === 'admin';
     }
 
     public function isModerator()
     {
-        return $this->is_moderator;
+        return $this->role === 'moderator';
     }
 }

@@ -38,7 +38,7 @@ class CommentPolicy
     /**
      * Determine if the given comment can be destroyed by the user.
      */
-    public function destroy(User $user, Comment $comment): bool
+    public function delete(User $user, Comment $comment): bool
     {
         return $user->id === $comment->user_id;
     }

@@ -8,6 +8,7 @@ use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -39,14 +40,16 @@ class CommentController extends Controller
     }
 
     // GET /comments/edit/{id}
-    public function edit(int $id): View
+    public function edit(Request $request, int $id): View
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         $comment = Comment::query()->find($id);
 
         if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $comment)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         return \view('comment.edit', [
@@ -56,8 +59,6 @@ class CommentController extends Controller
     // PUT /comments/edit/{id}
     public function update(CommentUpdateRequest $request, int $id): RedirectResponse
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         if ($request['id'] != $id) {
             abort(ResponseAlias::HTTP_BAD_REQUEST); // Programmers error
         }
@@ -68,6 +69,10 @@ class CommentController extends Controller
 
         if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('update', $comment)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $comment->update([
@@ -83,12 +88,14 @@ class CommentController extends Controller
     // DELETE /comments/delete/{id}
     public function destroy(CommentDeleteRequest $request, int $id): Response
     {
-        // TODO: Authorize - Resource owner authorization | Moderator | Admin
-
         $comment = Comment::query()->find($id);
 
         if ($comment == null) {
             abort(ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        if ($request->user()->cannot('delete', $comment)) {
+            abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
         $comment->delete();
