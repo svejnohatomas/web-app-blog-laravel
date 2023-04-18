@@ -56,7 +56,7 @@ class CategoryController extends Controller
     // GET /categories/create
     public function create(): View
     {
-        if (Gate::none(['admin', 'moderator'])) {
+        if (Gate::none(['admin'])) {
             abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
@@ -66,7 +66,7 @@ class CategoryController extends Controller
     // POST /categories/create
     public function store(CategoryCreateRequest $request): RedirectResponse
     {
-        if (Gate::none(['admin', 'moderator'])) {
+        if (Gate::none(['admin'])) {
             abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
@@ -133,7 +133,7 @@ class CategoryController extends Controller
     // DELETE: /categories/delete/{id}
     public function destroy(CategoryDeleteRequest $request, int $id): RedirectResponse
     {
-        if (Gate::none(['admin', 'moderator'])) {
+        if (Gate::none(['admin'])) {
             abort(ResponseAlias::HTTP_FORBIDDEN);
         }
 
