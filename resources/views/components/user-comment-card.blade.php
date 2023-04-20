@@ -7,7 +7,7 @@
         <div class="flex space-x-3 items-center">
             <div class="flex-none">
                 <a class="underline hover:no-underline" href="{{ route('post.show', ['slug' => $comment->post->slug]) }}">
-                    <h3>{{ $comment->post->title }}</h3>
+                    <h2>{{ $comment->post->title }}</h2>
                 </a>
             </div>
             <div class="flex-1">

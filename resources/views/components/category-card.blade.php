@@ -5,7 +5,7 @@
     <div class="p-6 text-gray-900 dark:text-gray-100">
         <div class="flex space-x-3">
             <div class="flex-1">
-                <h3 class="font-bold text-lg">{{ $category->title }}</h3>
+                <h2 class="font-bold text-lg">{{ $category->title }}</h2>
             </div>
             @can('update', $category)
                 <div class="flex-none">

@@ -6,7 +6,7 @@
 
         <div class="flex space-x-3 items-center">
             <div class="flex-1">
-                <h3 class="font-bold text-lg">{{ $post->title }}</h3>
+                <h2 class="font-bold text-lg">{{ $post->title }}</h2>
             </div>
             @can('update', $post)
                 <div class="flex-none">

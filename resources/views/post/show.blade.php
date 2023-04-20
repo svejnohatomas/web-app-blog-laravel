@@ -3,9 +3,9 @@
     <x-slot name="header">
         <div class="flex space-x-3 items-center">
             <div class="flex-1">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h1 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     {{ $post->title }}
-                </h2>
+                </h1>
             </div>
             @can('update', $post)
                 <div class="flex-none text-gray-800 dark:text-gray-200">
@@ -110,13 +110,14 @@
                     </div>
                     <div class="flex flex-col space-y-4">
                         <div>
-                            <h3 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Comments') }}</h3>
+                            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Comments') }}</h2>
                         </div>
 
                         @can('create', Comment::class)
                             <div class="flex flex-col space-y-3">
                                 <div>
                                     <x-textarea-input id="commentInput"
+                                                      aria-label="Input textbox for comment"
                                                       placeholder="{{ __('Leave a comment...') }}"></x-textarea-input>
                                 </div>
                                 <div class="flex justify-end">

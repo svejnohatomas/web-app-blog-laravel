@@ -7,7 +7,7 @@
         <div class="flex space-x-3">
             <div class="flex-1">
                 <a href="{{ route('post.show', ['slug' => $post->slug]) }}">
-                    <h3 class="font-bold text-lg">{{ $post->title }}</h3>
+                    <h2 class="font-bold text-lg">{{ $post->title }}</h2>
                 </a>
             </div>
             @can('update', $post)
